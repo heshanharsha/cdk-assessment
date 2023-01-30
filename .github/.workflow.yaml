@@ -1,0 +1,49 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y awscli
+
+    - name: Build Docker image
+      run: |
+        docker build -t my-django-app .
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Tag Docker image
+      run: |
+        export REPOSITORY=$(echo ${{ steps.login-ecr.outputs.repository }} | cut -d/ -f2)
+        docker tag my-django-app:latest ${{ env.AWS_REGION }}.dkr.ecr.${AWS_REGION}.amazonaws.com/$REPOSITORY:latest
+
+    - name: Push Docker image
+      run: |
+        docker push ${{ env.AWS_REGION }}.dkr.ecr.${AWS_REGION}.amazonaws.com/$REPOSITORY:latest
+
+    - name: Deploy using AWS CDK
+      run: |
+        npx cdk deploy -c region=${{ env.AWS_REGION }}
