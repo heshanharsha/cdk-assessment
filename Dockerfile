@@ -13,7 +13,9 @@ RUN pip install -r requirements.txt
 # Expose the port that the application runs on
 EXPOSE 8000
 
-RUN chmod +x testapp/start.sh
+WORKDIR /app/testapp
+
+RUN chmod +x start.sh
 
 # Start the application
-CMD ["testapp/start.sh"]
+CMD ["./start.sh"]
