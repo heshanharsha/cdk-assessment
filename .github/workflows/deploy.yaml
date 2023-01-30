@@ -47,4 +47,4 @@ jobs:
     - name: Deploy using AWS CDK
       run: |
         npm install
-        npx cdk deploy -c region=${{ env.AWS_REGION }}
+        npx cdk deploy -c region=${{ env.AWS_REGION }} --require-approval=never
