@@ -18,9 +18,9 @@ export class CdkAssessmentStack extends cdk.Stack {
     });
 
     // Create an ECR repository
-    // const repository = new ecr.Repository(this, 'MyRepository', {
-    //   repositoryName: 'my-django-app'
-    // });
+    const repository = new ecr.Repository(this, 'MyRepository', {
+      repositoryName: 'my-django-app'
+    });
 
     // Create an ECS cluster
     const cluster = new ecs.Cluster(this, 'MyCluster', {
@@ -41,7 +41,7 @@ export class CdkAssessmentStack extends cdk.Stack {
 
     // Add container
     const container = taskDefinition.addContainer('MyContainer', {
-      image: ecs.ContainerImage.fromRegistry('469581778874.dkr.ecr.us-east-1.amazonaws.com/my-django-app:latest'),
+      image: ecs.ContainerImage.fromEcrRepository(repository, 'latest'),
       memoryLimitMiB: 1024,
       cpu: 512,
       environment: {
