@@ -38,12 +38,11 @@ jobs:
 
     - name: Tag Docker image
       run: |
-        export REPOSITORY=$(echo ${{ steps.login-ecr.outputs.repository }} | cut -d/ -f2)
-        docker tag my-django-app:latest ${{ env.AWS_REGION }}.dkr.ecr.${AWS_REGION}.amazonaws.com/$REPOSITORY:latest
+        docker tag my-django-app:latest ${{ env.AWS_REGION }}.dkr.ecr.${AWS_REGION}.amazonaws.com/my-node-app:latest
 
     - name: Push Docker image
       run: |
-        docker push ${{ env.AWS_REGION }}.dkr.ecr.${AWS_REGION}.amazonaws.com/$REPOSITORY:latest
+        docker push ${{ env.AWS_REGION }}.dkr.ecr.${AWS_REGION}.amazonaws.com/my-node-app:latest
 
     - name: Deploy using AWS CDK
       run: |
