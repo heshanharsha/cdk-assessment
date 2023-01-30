@@ -38,11 +38,11 @@ jobs:
 
     - name: Tag Docker image
       run: |
-        docker tag my-django-app:latest ${{ secrets.AWS_ACCOUNT }}.${{ env.AWS_REGION }}.dkr.ecr.${AWS_REGION}.amazonaws.com/my-node-app:latest
+        docker tag my-django-app:latest 469581778874.dkr.ecr.us-east-1.amazonaws.com/my-node-app:latest
 
     - name: Push Docker image
       run: |
-        docker push ${{ secrets.AWS_ACCOUNT }}.${{ env.AWS_REGION }}.dkr.ecr.${AWS_REGION}.amazonaws.com/my-node-app:latest
+        docker push 469581778874.dkr.ecr.us-east-1.amazonaws.com/my-node-app:latest
 
     - name: Deploy using AWS CDK
       run: |
